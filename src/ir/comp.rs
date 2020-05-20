@@ -356,6 +356,7 @@ impl Bitfield {
             if self.width() as u64 == mem::size_of::<u64>() as u64 * 8 {
                 u64::MAX
             } else {
+                    #[allow(unused_parens)]
                 ((1u64 << self.width()) - 1u64)
             };
 

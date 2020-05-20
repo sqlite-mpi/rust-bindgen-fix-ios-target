@@ -1572,7 +1572,14 @@ impl TranslationUnit {
         let fname = CString::new(file).unwrap();
         let _c_args: Vec<CString> = cmd_args
             .iter()
-            .map(|s| CString::new(s.clone()).unwrap())
+            .map(|s| {
+                // @see https://github.com/rust-lang/rust-bindgen/issues/1211
+                if s == "--target=aarch64-apple-ios" {
+                    dbg!("bindgen: Replaced aarch64-apple-ios with arm64-apple-ios");
+                    return CString::new("--target=arm64-apple-ios".to_string()).unwrap();
+                }
+                CString::new(s.clone()).unwrap()
+            })
             .collect();
         let c_args: Vec<*const c_char> =
             _c_args.iter().map(|s| s.as_ptr()).collect();
